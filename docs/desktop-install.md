@@ -1,10 +1,10 @@
 # 官方 Desktop 安装 Workproof
 
-面向官方 **DeepSeek Harness 0.2.0-rc.2**。这是依据该版本官方管理器合同整理的操作说明；本项目的实际安装、UI、重启和卸载验证使用独立测试 profile，不代表已改动你的日常 Desktop profile。
+已验证官方 **DeepSeek Harness 0.2.0-rc.2 与 0.2.1-rc.3**。这是依据该版本官方管理器合同整理的操作说明；本项目的实际安装、UI、重启和卸载验证使用独立测试 profile，不代表已改动你的日常 Desktop profile。
 
 ## 安装
 
-先完成正在运行的任务，并在 [v0.1.0 Release](https://github.com/piggy00544/dsh-workproof/releases/tag/v0.1.0) 查看包与 `SHA256SUMS`。两个插件互相独立，一次安装一个。
+先完成正在运行的任务，并在 [v0.1.2 Release](https://github.com/oxmumu3/dsh-workproof/releases/tag/v0.1.2) 查看包与 `SHA256SUMS`。两个插件互相独立，一次安装一个。
 
 1. 左侧栏 **插件 → 添加插件**。
 2. 在 **包名或地址** 粘贴下面某一个完整 `.tgz` URL，点击 **安装**。这里填的是包地址，不是整条 `dsh plugin ...` 命令。
@@ -13,13 +13,13 @@
 交付回执：
 
 ```text
-https://github.com/piggy00544/dsh-workproof/releases/download/v0.1.0/dsh-delivery-receipts-0.1.0.tgz
+https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-delivery-receipts-0.1.2.tgz
 ```
 
 研究证据账本：
 
 ```text
-https://github.com/piggy00544/dsh-workproof/releases/download/v0.1.0/dsh-evidence-ledger-0.1.0.tgz
+https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-evidence-ledger-0.1.2.tgz
 ```
 
 Host 支持热重载时可以在线生效；只有提示下次启动后加载/生效时才完整退出再打开。macOS 的关闭窗口不是退出应用，可以用 **⌘Q** 完整退出。不要在还有任务运行时贸然退出。

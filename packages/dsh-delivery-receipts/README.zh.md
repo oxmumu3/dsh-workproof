@@ -8,9 +8,9 @@
 
 ## 发布状态
 
-**版本 0.1.0。** 下载资产见 [Releases](https://github.com/piggy00544/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/piggy00544/dsh-workproof/blob/main/docs/verification.md)。包版本不等于对未测试宿主的兼容承诺。
+**版本 0.1.2。** 下载资产见 [Releases](https://github.com/oxmumu3/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md)。包版本不等于对未测试宿主的兼容承诺。
 
-首版精确面向 **DeepSeek Harness `0.2.0-rc.2`**，三个 peer dependency 均固定为该版本：
+已验证 **DeepSeek Harness `0.2.0-rc.2` 与 `0.2.1-rc.3`**，三个 peer dependency 仅声明这两个已验证版本：
 
 - `@deepseek-ai/dsh-tools`
 - `@deepseek-ai/dsh-storage-domain`
@@ -32,15 +32,15 @@
 
 使用 **GitHub Release 预构建 `.tgz`** 分发，不包含 `install`、`postinstall` 等安装时脚本，不需要 npm 账号凭据。安装时，包管理器仍可能下载声明的依赖。
 
-检查 v0.1.0 Release 和校验和后，安装到目标 profile：
+检查 v0.1.2 Release 和校验和后，安装到目标 profile：
 
 ```sh
-dsh plugin --profile web add https://github.com/piggy00544/dsh-workproof/releases/download/v0.1.0/dsh-delivery-receipts-0.1.0.tgz
+dsh plugin --profile web add https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-delivery-receipts-0.1.2.tgz
 ```
 
 命令中的 `web` 是示例 profile 名，不是所有桌面应用通用的配置名；请使用实际应用选中的 profile。插件加载和重启遵循该版本 Harness 的正常机制，不要为寻找标签页修改其他 profile。
 
-源码与发布状态：[piggy00544/dsh-workproof](https://github.com/piggy00544/dsh-workproof)。
+源码与发布状态：[oxmumu3/dsh-workproof](https://github.com/oxmumu3/dsh-workproof)。
 
 ## 日常使用
 
@@ -141,7 +141,7 @@ dsh plugin --profile web remove dsh-delivery-receipts
 
 卸载不会删除业务文件或对话。插件自身的回执记录可能继续保留在 Harness 存储中，供重装后恢复。首版不提供清空记录命令；不要为了删除回执而删除整个 Harness home。
 
-问题请提交到 [GitHub Issues](https://github.com/piggy00544/dsh-workproof/issues)，附插件、Harness、Node 版本与最小合成复现。上传截图或导出前，请先检查敏感内容。
+问题请提交到 [GitHub Issues](https://github.com/oxmumu3/dsh-workproof/issues)，附插件、Harness、Node 版本与最小合成复现。上传截图或导出前，请先检查敏感内容。
 
 ## 许可
 

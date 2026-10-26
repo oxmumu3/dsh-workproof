@@ -2,6 +2,42 @@
 
 This file separates source-level checks, real runtime checks, packaged UI checks and public-release verification. A completed earlier layer does not imply later layers passed. All examples are synthetic; no business files, model credentials or existing conversations are used.
 
+## Compatibility and security release 0.1.2 — 2026-10-25
+
+The repository was transferred to **oxmumu3/dsh-workproof**. GitHub's canonical
+repository ID remains `1403776932`; existing history and v0.1.0 assets remain in
+the same repository. The author remains 牛村木木山.
+
+Both packages now declare only the tested Host versions
+`0.2.0-rc.2 || 0.2.1-rc.3` in `engines.dsh` and their three DSH peers. The previous
+exact rc.2 peers prevented the new official Host from activating these bundles.
+Runtime implementation, storage schema, tools, commands and UI are unchanged.
+Zod is pinned to `4.6.6` to address
+[GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
+
+| Check on final 0.1.2 archives | Result |
+| --- | --- |
+| Source and compatibility regressions | 63/63 passed |
+| Original official 0.2.0-rc.2 tools/commands/storage integration | 4/4 passed |
+| Official Desktop 0.2.1-rc.3 plugin-manager install | Both packed bundles installed, enabled and active in a disposable Web profile |
+| Current app's bundled Cordis 4.0.5 and DSH 0.2.1-rc.3 services | All four existing Host tests passed against the installed packages |
+| Package allowlist/privacy/identity regressions | 12/12 passed; receipt 15 files, ledger 12 files |
+| Production dependency audit | Zero vulnerabilities after the Zod patch |
+
+The current-app service tests use the official distribution's exact peer modules,
+temporary JSON storage and synthetic session identities. They cover actual tool
+and command result pipelines, UTF-8/binary hashes, user-only review, cross-session
+rejection, stale versions, selective exports and storage reopening. The standalone
+runner binds consumer peers to the app's bundled modules as the official loader
+does; it does not rewrite installed plugin code.
+
+Run `node scripts/verify-desktop.mjs <receipt.tgz> <ledger.tgz>` on macOS with the
+official app installed. It starts and stops its own disposable Host and records
+private diagnostics under ignored `.local/`. It does not use a model, operate
+WeChat, test the unchanged UI again, or install into the user's Desktop profile.
+Earlier UI evidence below does not become new rc.3 UI or model acceptance.
+The separate unshipped compact-response experiment is not in this release.
+
 ## Delivery Receipts 0.1.0
 
 Target: official DeepSeek Harness Desktop/Web runtime **0.2.0-rc.2**, macOS arm64. The official desktop update's signature and notarization were checked separately from plugin acceptance.

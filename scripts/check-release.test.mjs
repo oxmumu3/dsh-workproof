@@ -65,6 +65,7 @@ for (const [label, change] of [
   ['missing file', files => files.delete('package/LICENSE')],
   ['private path', files => files.set('package/README.md', Buffer.from('/Users/synthetic-private/project'))],
   ['credential', files => files.set('package/README.md', Buffer.from('ghp_' + 'a'.repeat(40)))],
+  ['old project owner', files => files.set('package/README.md', Buffer.from('https://github.com/piggy00544/dsh-workproof'))],
   ['install script', files => { const p = JSON.parse(files.get('package/package.json')); p.scripts = { postinstall: 'echo unsafe' }; files.set('package/package.json', Buffer.from(JSON.stringify(p))); }],
   ['wrong peer', files => { const p = JSON.parse(files.get('package/package.json')); p.peerDependencies['@deepseek-ai/dsh-tools'] = '*'; files.set('package/package.json', Buffer.from(JSON.stringify(p))); }],
   ['traversal', files => files.set('package/../escape', Buffer.from('synthetic'))],

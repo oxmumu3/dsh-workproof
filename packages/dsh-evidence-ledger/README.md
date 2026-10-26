@@ -8,9 +8,9 @@ Author: **牛村木木山**. A community project, not an official DeepSeek produ
 
 ## Release status and compatibility
 
-**Version 0.1.0.** See [Releases](https://github.com/piggy00544/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/piggy00544/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. A package version is not a promise of compatibility with untested hosts.
+**Version 0.1.2.** See [Releases](https://github.com/oxmumu3/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. A package version is not a promise of compatibility with untested hosts.
 
-This package targets **DeepSeek Harness `0.2.0-rc.2` exactly**, with peers `@deepseek-ai/dsh-tools`, `@deepseek-ai/dsh-storage-domain` and `@deepseek-ai/dsh-commands` all pinned to `0.2.0-rc.2`. Node.js **22+** is required. The first acceptance target is a **local macOS workspace**; other operating systems, remote workspaces and Harness versions are unverified.
+Tested Host versions are **DeepSeek Harness `0.2.0-rc.2` and `0.2.1-rc.3`**. The tools, storage-domain and commands peers declare only the explicit union of these versions. Node.js **22+** is required. The first acceptance target is a **local macOS workspace**; other operating systems, remote workspaces and Harness versions are unverified.
 
 ## What it does
 
@@ -29,13 +29,13 @@ Structural observations identify assertions with no source, sources with no loca
 
 The distribution uses a prebuilt GitHub Release `.tgz`, with **no install-time scripts** and no npm account requirement. The package manager may fetch declared dependencies when installing.
 
-After checking the v0.1.0 Release and its checksums, install into your intended profile:
+After checking the v0.1.2 Release and its checksums, install into your intended profile:
 
 ```sh
-dsh plugin --profile web add https://github.com/piggy00544/dsh-workproof/releases/download/v0.1.0/dsh-evidence-ledger-0.1.0.tgz
+dsh plugin --profile web add https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-evidence-ledger-0.1.2.tgz
 ```
 
-`web` is an example profile, not a universal Desktop profile name. Use the profile selected by your actual app and follow the Harness version's normal reload/restart behavior. Source and release status: [piggy00544/dsh-workproof](https://github.com/piggy00544/dsh-workproof).
+`web` is an example profile, not a universal Desktop profile name. Use the profile selected by your actual app and follow the Harness version's normal reload/restart behavior. Source and release status: [oxmumu3/dsh-workproof](https://github.com/oxmumu3/dsh-workproof).
 
 ## Everyday use
 
@@ -102,7 +102,7 @@ dsh plugin --profile web remove dsh-evidence-ledger
 
 Removing the plugin does not delete business files or conversations. Plugin-owned ledger records may remain in Harness storage for recovery after reinstalling. v0.1 has no purge command; do not remove the Harness home directory to delete a ledger.
 
-Report minimal synthetic reproductions at [GitHub Issues](https://github.com/piggy00544/dsh-workproof/issues), with plugin, Harness and Node versions. Check screenshots and exports for sensitive metadata first.
+Report minimal synthetic reproductions at [GitHub Issues](https://github.com/oxmumu3/dsh-workproof/issues), with plugin, Harness and Node versions. Check screenshots and exports for sensitive metadata first.
 
 ## License
 

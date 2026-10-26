@@ -30,9 +30,9 @@
 
 ## 安装与兼容
 
-[下载 Release](https://github.com/piggy00544/dsh-workproof/releases) · [验证记录](docs/verification.md) · [反馈问题](https://github.com/piggy00544/dsh-workproof/issues)
+[下载 Release](https://github.com/oxmumu3/dsh-workproof/releases) · [验证记录](docs/verification.md) · [反馈问题](https://github.com/oxmumu3/dsh-workproof/issues)
 
-首版 `0.1.0` 精确面向 **Harness `0.2.0-rc.2`，Node.js 22+，macOS 本地工作区**。其他宿主版本、系统和远程工作区不作未经验证的兼容承诺。源代码测试、安装包测试和社区收录是不同状态，见验证记录。
+当前 `0.1.2` 已验证 **Harness `0.2.0-rc.2` 与 `0.2.1-rc.3`、Node.js 22+、macOS 本地工作区**。其他宿主版本、系统和远程工作区不作未经验证的兼容承诺。源代码测试、安装包测试和社区收录是不同状态，见验证记录。
 
 Release 使用 `.tgz` 预构建包及 `SHA256SUMS`，不需要 npm 账号，两个插件包自身不含安装时脚本。对照校验和后，按各插件文档安装到你应用实际使用的 profile；文档中的 `web` 只是示例，不能拿来覆盖桌面 profile。
 

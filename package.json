@@ -1,16 +1,21 @@
 {
   "name": "dsh-workproof",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "node --test packages/*/test/*.test.js",
+    "test": "node --test packages/*/test/*.test.js scripts/compatibility.test.mjs",
     "test:host": "node --test scripts/*host-smoke.mjs",
     "test:release": "node --test scripts/check-release.test.mjs",
-    "check": "node --check packages/dsh-delivery-receipts/index.js && node --check packages/dsh-delivery-receipts/client.js && node --check packages/dsh-evidence-ledger/index.js && node --check packages/dsh-evidence-ledger/client.js"
+    "check": "node --check packages/dsh-delivery-receipts/index.js && node --check packages/dsh-delivery-receipts/client.js && node --check packages/dsh-evidence-ledger/index.js && node --check packages/dsh-evidence-ledger/client.js",
+    "test:compatibility": "node --test scripts/compatibility.test.mjs"
   },
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "devDependencies": {
     "@deepseek-ai/cordis": "4.0.4",
     "@deepseek-ai/dsh-tools": "0.2.0-rc.2",
