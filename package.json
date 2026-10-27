@@ -1,7 +1,7 @@
 {
   "name": "dsh-workproof",
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.3-preview.1",
   "type": "module",
   "workspaces": [
     "packages/*"
