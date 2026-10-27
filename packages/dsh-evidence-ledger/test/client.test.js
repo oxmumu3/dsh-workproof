@@ -8,7 +8,8 @@ test('ledger client uses exact native loader identity and disposable conversatio
   assert.ok(code.length, 'ledger client not implemented');
   let bundle;
   vm.runInNewContext(code, { window: { __ModuleLoader__: { load: value => { bundle = value; } } } });
-  assert.equal(bundle.id, 'dsh-evidence-ledger');
+  const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(bundle.id, pkg.name);
   const plugin = bundle.factory(name => { assert.equal(name, 'react'); return { createElement() {} }; });
   const cleanups = []; const slots = []; let disposed = 0;
   plugin.apply({
