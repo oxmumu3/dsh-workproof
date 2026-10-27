@@ -8,7 +8,8 @@ test('client registers the exact package ID and mounts/disposes through the nati
   assert.ok(code.length > 0, 'client module has not been implemented');
   let bundle;
   vm.runInNewContext(code, { window: { __ModuleLoader__: { load: value => { bundle = value; } } } });
-  assert.equal(bundle.id, 'dsh-delivery-receipts');
+  const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(bundle.id, pkg.name);
   const imports = [];
   const plugin = bundle.factory(name => { imports.push(name); assert.equal(name, 'react'); return { createElement() {} }; });
   assert.deepEqual(imports, ['react']);

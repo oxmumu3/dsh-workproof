@@ -1,5 +1,5 @@
 {
-  "name": "dsh-delivery-receipts",
+  "name": "@oxmumu3/dsh-delivery-receipts",
   "version": "0.1.2",
   "description": "Session-scoped artifact receipts with file evidence and version-bound user decisions",
   "author": "牛村木木山",
@@ -55,5 +55,9 @@
       ],
       "external": []
     }
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
   }
 }

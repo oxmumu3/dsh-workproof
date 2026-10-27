@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: 'dsh-evidence-ledger',
+  id: '@oxmumu3/dsh-evidence-ledger',
   factory(require) {
     const React = require('react');
     const h = React.createElement;

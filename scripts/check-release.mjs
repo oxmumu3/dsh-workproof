@@ -58,20 +58,22 @@ async function check(file) {
   }
   ensure(tar.length - offset >= 1024 && tar.subarray(offset).every(byte => byte === 0));
   const pkg = JSON.parse(files.get('package/package.json'));
-  ensure(Object.hasOwn(specific, pkg.name) && pkg.version === '0.1.2');
-  const allowed = new Set([...common, ...specific[pkg.name]].map(name => 'package/' + name));
+  const prefix = '@oxmumu3/';
+  const localName = pkg.name?.startsWith(prefix) ? pkg.name.slice(prefix.length) : '';
+  ensure(Object.hasOwn(specific, localName) && pkg.version === '0.1.2');
+  const allowed = new Set([...common, ...specific[localName]].map(name => 'package/' + name));
   ensure(files.size === allowed.size && [...files.keys()].every(name => allowed.has(name)));
   ensure(pkg.scripts === undefined || Object.keys(pkg.scripts).length === 0);
   ensure(pkg.type === 'module' && pkg.license === 'MIT' && pkg.engines?.node === '>=22');
   ensure(pkg.engines?.dsh === '0.2.0-rc.2 || 0.2.1-rc.3');
-  ensure(pkg.repository?.url === 'https://github.com/oxmumu3/dsh-workproof.git' && pkg.repository?.directory === `packages/${pkg.name}`);
+  ensure(pkg.repository?.url === 'https://github.com/oxmumu3/dsh-workproof.git' && pkg.repository?.directory === `packages/${localName}`);
   ensure(JSON.stringify(pkg.dependencies) === JSON.stringify({ zod: '4.6.6' }));
   const peers = ['@deepseek-ai/dsh-tools', '@deepseek-ai/dsh-storage-domain', '@deepseek-ai/dsh-commands'];
   ensure(Object.keys(pkg.peerDependencies ?? {}).length === peers.length && peers.every(name => pkg.peerDependencies[name] === '0.2.0-rc.2 || 0.2.1-rc.3'));
   ensure(pkg.dsh?.manifestVersion === 1 && pkg.dsh.bundle?.patch === './cordis.patch.yml' && pkg.dsh.client?.platform === 'web');
   ensure(pkg.exports?.['.'] === './index.js' && pkg.exports?.['./client'] === './client.js');
-  const id = pkg.name.replace(/^dsh-/, 'workproof-');
-  ensure(files.get('package/cordis.patch.yml').trim() === `- insert:\n    - id: ${id}\n      name: ${pkg.name}`);
+  const id = localName.replace(/^dsh-/, 'workproof-');
+  ensure(files.get('package/cordis.patch.yml').trim() === `- insert:\n    - id: ${id}\n      name: "${pkg.name}"`);
   ensure(new RegExp(`id:\\s*['"]${pkg.name}['"]`).test(files.get('package/client.js')));
   return `sha256=${createHash('sha256').update(compressed).digest('hex')} files=${files.size}`;
 }
