@@ -1,5 +1,5 @@
 {
-  "name": "dsh-evidence-ledger",
+  "name": "@oxmumu3/dsh-evidence-ledger",
   "version": "0.1.2",
   "description": "Session-scoped sources, assertions, inferences and open questions with explicit evidence boundaries",
   "author": "牛村木木山",
@@ -55,5 +55,9 @@
       ],
       "external": []
     }
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
   }
 }
