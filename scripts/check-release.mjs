@@ -60,7 +60,7 @@ async function check(file) {
   const pkg = JSON.parse(files.get('package/package.json'));
   const prefix = '@oxmumu3/';
   const localName = pkg.name?.startsWith(prefix) ? pkg.name.slice(prefix.length) : '';
-  ensure(Object.hasOwn(specific, localName) && pkg.version === '0.1.2');
+  ensure(Object.hasOwn(specific, localName) && pkg.version === '0.1.3-preview.1');
   const allowed = new Set([...common, ...specific[localName]].map(name => 'package/' + name));
   ensure(files.size === allowed.size && [...files.keys()].every(name => allowed.has(name)));
   ensure(pkg.scripts === undefined || Object.keys(pkg.scripts).length === 0);
