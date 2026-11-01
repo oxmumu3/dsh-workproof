@@ -2,6 +2,17 @@
 
 This file separates source-level checks, real runtime checks, packaged UI checks and public-release verification. A completed earlier layer does not imply later layers passed. All examples are synthetic; no business files, model credentials or existing conversations are used.
 
+## Compatibility preview 0.1.3-preview.2 — 2026-11-01
+
+Both scoped packages retain the exact runtime bytes of public npm
+`0.1.3-preview.1`. The tested explicit Host union adds `0.2.1-rc.4` and
+`0.2.1-rc.5` while retaining `0.2.0-rc.2` and `0.2.1-rc.3`.
+Each of these four exact official service sets passed 82 checks; rc.4 and rc.5
+also installed, enabled and exercised both exact candidate archives inside their
+official CLI Hosts with fresh synthetic homes. Publication is verified separately from these local checks.
+See [the compatibility verification record](releases/v0.1.3-preview.2.md) for method,
+publication workflow, ongoing version-check commands and acceptance boundaries.
+
 ## Compatibility and security release 0.1.2 — 2026-10-25
 
 The repository was transferred to **oxmumu3/dsh-workproof**. GitHub's canonical

@@ -32,11 +32,11 @@
 
 [下载 Release](https://github.com/oxmumu3/dsh-workproof/releases) · [验证记录](docs/verification.md) · [反馈问题](https://github.com/oxmumu3/dsh-workproof/issues)
 
-当前 `0.1.2` 已验证 **Harness `0.2.0-rc.2` 与 `0.2.1-rc.3`、Node.js 22+、macOS 本地工作区**。其他宿主版本、系统和远程工作区不作未经验证的兼容承诺。源代码测试、安装包测试和社区收录是不同状态，见验证记录。
+当前兼容性预览 `0.1.3-preview.2` 已验证 **Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`、Node.js 22+、macOS 本地工作区**。运行时代码与公开 npm `0.1.3-preview.1` 一致；rc.4/rc.5 新增隔离 CLI Host 和工具/命令/存储验证，不代表新的 UI 或模型验收。其他宿主版本、系统和远程工作区不作未经验证的兼容承诺。源代码测试、安装包测试和社区收录是不同状态，见验证记录。
 
 Release 使用 `.tgz` 预构建包及 `SHA256SUMS`，不需要 npm 账号，两个插件包自身不含安装时脚本。对照校验和后，按各插件文档安装到你应用实际使用的 profile；文档中的 `web` 只是示例，不能拿来覆盖桌面 profile。
 
-**官方 Desktop 用户：** 先完成正在运行的任务，再从左侧“插件”→“添加插件”，在“包名或地址”粘贴 Release `.tgz` 的完整地址，点“安装”，完成后点“立即启用”。不要把整条 CLI 命令粘进输入框。两个插件分别安装；只有宿主提示下次启动生效时才完整退出并重开。详见[桌面安装指引与可复制地址](docs/desktop-install.md)。
+**官方 Desktop 用户：** 先完成正在运行的任务，再从左侧“插件”→“添加插件”，在“包名或地址”粘贴下面安装指引中的 npm 精确包名和版本，点“安装”，完成后点“立即启用”。不要把整条 CLI 命令粘进输入框。两个插件分别安装；只有宿主提示下次启动生效时才完整退出并重开。详见[桌面安装指引与可复制地址](docs/desktop-install.md)。
 
 新手可先试交付回执：
 
@@ -64,7 +64,10 @@ npm run check
 npm test
 npm run test:host
 npm run test:release
+npm run check:official
 ```
+
+`check:official` 读取官方 npm `latest`，遇到未测试的新版本会失败；完成隔离 SDK/Host 验证后才可扩展 `compatibility-manifest.json` 与包声明。该检查脚本不创建定时任务或发布包。
 
 设计与验收范围：[交付回执](docs/superpowers/specs/2026-10-04-delivery-receipts-design.md) · [研究证据账本](docs/superpowers/specs/2026-10-04-evidence-ledger-design.md)。欢迎携带最小合成复现来提 Issue，不要上传密钥、内部资料或原始聊天记录。
 

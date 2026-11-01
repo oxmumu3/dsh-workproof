@@ -8,13 +8,13 @@ Author: **牛村木木山**. This is a community project, not an official DeepSe
 
 ## Release status
 
-**Version 0.1.2.** See [Releases](https://github.com/oxmumu3/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. A package version is not a promise of compatibility with untested hosts.
+**Compatibility preview 0.1.3-preview.2.** See [Releases](https://github.com/oxmumu3/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. Runtime code is byte-identical to public npm 0.1.3-preview.1. The rc.4/rc.5 checks use synthetic local data, real official tools/commands/storage and isolated CLI Hosts; they do not renew UI or model acceptance. A package version is not a promise of compatibility with untested hosts.
 
-Tested Host versions are **DeepSeek Harness `0.2.0-rc.2` and `0.2.1-rc.3`**. Each peer uses the explicit union of these versions:
+Tested Host versions are **DeepSeek Harness `0.2.0-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.4` and `0.2.1-rc.5`**. Each peer uses the explicit union of these versions:
 
-- `@deepseek-ai/dsh-tools@(0.2.0-rc.2 || 0.2.1-rc.3)`
-- `@deepseek-ai/dsh-storage-domain@(0.2.0-rc.2 || 0.2.1-rc.3)`
-- `@deepseek-ai/dsh-commands@(0.2.0-rc.2 || 0.2.1-rc.3)`
+- `@deepseek-ai/dsh-tools@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
+- `@deepseek-ai/dsh-storage-domain@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
+- `@deepseek-ai/dsh-commands@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
 
 Node.js 22 or newer is required. Initial end-to-end acceptance is scoped to **local files on macOS**. Windows, Linux, remote workspaces and other Harness versions are not yet verified.
 
@@ -30,12 +30,12 @@ A stable file is ready for review, not automatically complete. The plugin does n
 
 ## Installation
 
-The distribution uses a **prebuilt GitHub Release `.tgz`**, without `install`, `postinstall` or other install-time scripts. npm account credentials are not required. A package manager may still fetch declared dependencies during installation.
+The distribution uses a **prebuilt `.tgz`**, without `install`, `postinstall` or other install-time scripts. npm account credentials are not required. A package manager may still fetch declared dependencies during installation.
 
-After checking the v0.1.2 Release and its checksums, install into your intended profile:
+Install this exact npm version into your intended profile:
 
 ```sh
-dsh plugin --profile web add https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-delivery-receipts-0.1.2.tgz
+dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.2
 ```
 
 `web` is the profile name in this example, not a universal Desktop profile name. Use the profile selected by your actual app. Follow the Harness version's normal plugin reload/restart behavior; do not edit another profile merely to make the tab appear.

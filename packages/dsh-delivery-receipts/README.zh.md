@@ -8,9 +8,9 @@
 
 ## 发布状态
 
-**版本 0.1.2。** 下载资产见 [Releases](https://github.com/oxmumu3/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md)。包版本不等于对未测试宿主的兼容承诺。
+**兼容性预览 0.1.3-preview.2。** 下载资产见 [Releases](https://github.com/oxmumu3/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md)。运行时代码与公开 npm 0.1.3-preview.1 逐字节一致。rc.4/rc.5 检查使用合成本地数据、官方工具/命令/存储服务和隔离 CLI Host，不代表新的 UI 或模型验收。包版本不等于对未测试宿主的兼容承诺。
 
-已验证 **DeepSeek Harness `0.2.0-rc.2` 与 `0.2.1-rc.3`**，三个 peer dependency 仅声明这两个已验证版本：
+已验证 **DeepSeek Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`**，三个 peer dependency 仅声明这些已验证版本：
 
 - `@deepseek-ai/dsh-tools`
 - `@deepseek-ai/dsh-storage-domain`
@@ -30,12 +30,12 @@
 
 ## 安装方式
 
-使用 **GitHub Release 预构建 `.tgz`** 分发，不包含 `install`、`postinstall` 等安装时脚本，不需要 npm 账号凭据。安装时，包管理器仍可能下载声明的依赖。
+使用 **预构建 `.tgz`** 分发，不包含 `install`、`postinstall` 等安装时脚本，不需要 npm 账号凭据。安装时，包管理器仍可能下载声明的依赖。
 
-检查 v0.1.2 Release 和校验和后，安装到目标 profile：
+将这个确切的 npm 版本安装到目标 profile：
 
 ```sh
-dsh plugin --profile web add https://github.com/oxmumu3/dsh-workproof/releases/download/v0.1.2/dsh-delivery-receipts-0.1.2.tgz
+dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.2
 ```
 
 命令中的 `web` 是示例 profile 名，不是所有桌面应用通用的配置名；请使用实际应用选中的 profile。插件加载和重启遵循该版本 Harness 的正常机制，不要为寻找标签页修改其他 profile。

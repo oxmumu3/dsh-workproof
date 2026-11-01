@@ -1,7 +1,7 @@
 {
   "name": "dsh-workproof",
   "private": true,
-  "version": "0.1.3-preview.1",
+  "version": "0.1.3-preview.2",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -11,7 +11,8 @@
     "test:host": "node --test scripts/*host-smoke.mjs",
     "test:release": "node --test scripts/check-release.test.mjs",
     "check": "node --check packages/dsh-delivery-receipts/index.js && node --check packages/dsh-delivery-receipts/client.js && node --check packages/dsh-evidence-ledger/index.js && node --check packages/dsh-evidence-ledger/client.js",
-    "test:compatibility": "node --test scripts/compatibility.test.mjs"
+    "test:compatibility": "node --test scripts/compatibility.test.mjs",
+    "check:official": "node scripts/check-official-compatibility.mjs --latest"
   },
   "engines": {
     "node": ">=22"
