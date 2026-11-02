@@ -23,3 +23,9 @@ export function validateArtifactManifest(value,expected){
   ||!/^([a-f0-9]{64})$/.test(value.sha256)||!/^[-A-Za-z0-9_.]+\.tgz$/.test(value.filename))throw Error('Release artifact identity/hash binding mismatch');
  return value;
 }
+
+export function validateTap(text,minimum=82){
+ const counts=Object.fromEntries([...text.matchAll(/^# (tests|pass|fail|skipped|cancelled) (\d+)$/gm)].map(match=>[match[1],Number(match[2])]));
+ if(!(counts.tests>=minimum&&counts.pass===counts.tests&&counts.fail===0&&counts.skipped===0&&counts.cancelled===0))throw Error('TAP suite failed, incomplete, empty, skipped or cancelled');
+ return counts;
+}

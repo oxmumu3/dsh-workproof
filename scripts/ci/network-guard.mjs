@@ -1,4 +1,4 @@
-// Loaded before any Host or plugin module. External traffic is denied.
+// Additional Node diagnostics; the OS sandbox is the mandatory outbound boundary.
 import net from 'node:net';
 import http from 'node:http';
 import https from 'node:https';

@@ -31,3 +31,8 @@ test('runtime guard rejects every instrumented non-loopback transport before I/O
  const source=`import assert from 'node:assert/strict';import http from 'node:http';import https from 'node:https';import net from 'node:net';import tls from 'node:tls';import dgram from 'node:dgram';await assert.rejects(async()=>fetch('https://example.invalid'),/denied external/);for(const call of [()=>http.get('http://example.invalid'),()=>https.get('https://example.invalid'),()=>net.connect({host:'example.invalid',port:443}),()=>tls.connect({host:'example.invalid',port:443}),()=>dgram.createSocket('udp4')])assert.throws(call,/denied external/);assert.equal(globalThis.__workproofNetworkProof.externalAttempts,6);`;
  const result=spawnSync(process.execPath,['--import',new URL('./network-guard.mjs',import.meta.url).href,'--input-type=module','-e',source],{env:isolatedEnv(root,process.env.PATH),encoding:'utf8',timeout:10000});assert.equal(result.status,0,result.stderr);
 });
+test('TAP accounting rejects empty, incomplete, skipped or cancelled suites',async()=>{
+ const {validateTap}=await load();assert.equal(typeof validateTap,'function');
+ const complete='# tests 82\n# pass 82\n# fail 0\n# skipped 0\n# cancelled 0\n';assert.equal(validateTap(complete).tests,82);
+ for(const text of ['',complete.replace('tests 82','tests 0'),complete.replace('pass 82','pass 81'),complete.replace('skipped 0','skipped 1'),complete.replace('cancelled 0','cancelled 1')])assert.throws(()=>validateTap(text),/TAP/);
+});

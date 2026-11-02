@@ -6,21 +6,25 @@ import {createHash} from 'node:crypto';
 import {join,resolve,dirname,basename,delimiter} from 'node:path';
 import {tmpdir} from 'node:os';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {SDK_SERVICES,sdkInstallPlan,isolatedEnv,validateArtifactManifest} from './contracts.mjs';
+import {runInSandbox,verifySandbox,sandboxCommand} from './os-sandbox.mjs';
+import {checkOfficialCompatibility} from '../check-official-compatibility.mjs';
+import {SDK_SERVICES,sdkInstallPlan,isolatedEnv,validateArtifactManifest,validateTap} from './contracts.mjs';
 process.umask(0o077);
 const source=fileURLToPath(new URL('../../',import.meta.url));
 const args=process.argv.slice(2),options={};
-for(let i=0;i<args.length;i+=2){assert.ok(['--version','--output','--runtime-root','--artifacts-dir','--artifact-run-attempt'].includes(args[i]),'Unknown option');assert.ok(args[i+1],'Missing option value');options[args[i]]=args[i+1];}
+for(let i=0;i<args.length;i+=2){assert.ok(['--version','--output','--runtime-root','--artifacts-dir','--artifact-run-attempt','--mode'].includes(args[i]),'Unknown option');assert.ok(args[i+1],'Missing option value');options[args[i]]=args[i+1];}
 assert.equal(process.versions.node.split('.')[0],'22','Use Node 22 for compatibility checks');
 const manifest=JSON.parse(await readFile(join(source,'compatibility-manifest.json')));
 const plan=sdkInstallPlan(manifest,options['--version']);
+const mode=options['--mode']??'all';assert.ok(['all','services','host'].includes(mode));if(mode==='host')assert.ok(plan.officialHost,'No reviewed CLI Host contract for this SDK');
+const doServices=mode!=='host',doHost=plan.officialHost&&mode!=='services';if(doHost)assert.equal(process.platform,'darwin','Official CLI Host IPC contract requires macOS sandbox');
 const output=resolve(options['--output']??join(tmpdir(),'workproof-ci-'+plan.sdkVersion));await mkdir(output,{recursive:true});
 const root=await mkdtemp(join(tmpdir(),'workproof-ci-')),bootstrap=join(root,'runtime'),workspace=join(root,'source');
 const path=dirname(process.execPath)+delimiter+(process.env.PATH??'/usr/bin:/bin');
 const env=isolatedEnv(root,path);env.NPM_CONFIG_GLOBALCONFIG=join(root,'global-npmrc');
 for(const dir of [env.HOME,env.DSH_AGENTS_HOME,bootstrap])await mkdir(dir,{recursive:true});
 for(const path of [env.NPM_CONFIG_USERCONFIG,env.NPM_CONFIG_GLOBALCONFIG])await writeFile(path,'registry=https://registry.npmjs.org/\nignore-scripts=true\n');
-const exec=promisify(execFile);const proof={sdkVersion:plan.sdkVersion,startedAt:new Date().toISOString(),root,source,officialHostRequired:plan.officialHost,reusedRuntime:Boolean(options['--runtime-root']),productionProfileUsed:false,realModels:false,realMessages:false};
+const exec=promisify(execFile);const proof={sdkVersion:plan.sdkVersion,startedAt:new Date().toISOString(),root,source,officialHostRequired:doHost,mode,reusedRuntime:Boolean(options['--runtime-root']),productionProfileUsed:false,realModels:false,realMessages:false};
 const save=()=>writeFile(join(output,'proof.json'),JSON.stringify(proof,null,2)+'\n');
 async function command(file,args,cwd,log,timeout=100000,extra={}){
  try{const result=await exec(file,args,{cwd,env:{...env,...extra},timeout,maxBuffer:4*1024*1024});await writeFile(join(output,log),result.stdout+result.stderr);return result.stdout;}
@@ -30,14 +34,14 @@ const hash=async path=>createHash('sha256').update(await readFile(path)).digest(
 try{
  // All downloads happen here or in plugin-manager installation, without hooks,
  // credentials or a running Host. Runtime tests below block external traffic.
- const dependencies=options['--runtime-root']?{zod:'4.6.6',...(plan.officialHost?{pnpm:'11.28.5'}:{})}:plan.dependencies;
+ const dependencies=options['--runtime-root']?{zod:'4.6.6',...(doHost?{pnpm:'11.28.5'}:{})}:{...plan.dependencies};if(!doHost){delete dependencies['@deepseek-ai/dsh'];delete dependencies.pnpm;}
  await writeFile(join(bootstrap,'package.json'),JSON.stringify({private:true,dependencies},null,2)+'\n');
  await command('npm',['install','--ignore-scripts','--no-audit','--no-fund','--registry=https://registry.npmjs.org/'],bootstrap,'sdk-install.log',180000);
  const runtime=await realpath(options['--runtime-root']??join(bootstrap,'node_modules'));
  const packageVersion=async name=>JSON.parse(await readFile(join(runtime,name,'package.json'))).version;
  for(const name of SDK_SERVICES)assert.equal(await packageVersion('@deepseek-ai/'+name),plan.sdkVersion,name);
  assert.equal(await packageVersion('@deepseek-ai/cordis'),plan.cordis);
- if(plan.officialHost)assert.equal(await packageVersion('@deepseek-ai/dsh'),plan.sdkVersion);
+ if(doHost)assert.equal(await packageVersion('@deepseek-ai/dsh'),plan.sdkVersion);
  assert.equal(JSON.parse(await readFile(join(bootstrap,'node_modules/zod/package.json'))).version,'4.6.6');
  proof.runtime=runtime;proof.cordis=plan.cordis;proof.exactSdkVersionsVerified=true;
  await cp(source,workspace,{recursive:true,filter:p=>!['.git','node_modules','.local','coverage'].includes(basename(p))});
@@ -54,7 +58,15 @@ try{
  const guard=pathToFileURL(join(workspace,'scripts/ci/network-guard.mjs')).href;
  const tests=[];for(const name of ['dsh-delivery-receipts','dsh-evidence-ledger'])for(const file of await readdir(join(workspace,'packages',name,'test')))if(file.endsWith('.test.js'))tests.push('packages/'+name+'/test/'+file);
  tests.push('scripts/compatibility.test.mjs','scripts/check-release.test.mjs','scripts/host-smoke.mjs','scripts/ledger-host-smoke.mjs');
- await command(process.execPath,['--import',guard,'--test',...tests],workspace,'service-suite.log');proof.allOriginalSuitesPassed=true;await save();
+ const runtimeEnv={...env,NODE_OPTIONS:'--max-old-space-size=128'};proof.serviceHeapLimitMiB=128;proof.sandboxProbeHeapLimitMiB=128;
+ proof.osNetwork=await verifySandbox({cwd:workspace,env:runtimeEnv});await writeFile(join(output,'os-network-proof.json'),JSON.stringify(proof.osNetwork,null,2)+'\n');
+ if(doServices){
+  const result=await runInSandbox(process.execPath,['--max-old-space-size=128','--import',guard,'--test',...tests],{cwd:workspace,env:runtimeEnv,timeout:240000,maxBuffer:4*1024*1024}).catch(async error=>{await writeFile(join(output,'service-suite.log'),String(error.stdout??'')+String(error.stderr??''));throw error;});
+  await writeFile(join(output,'service-suite.log'),result.stdout+result.stderr);proof.tap=validateTap(result.stdout);proof.allOriginalSuitesPassed=true;
+ }
+ await save();
+ // Fresh official lookup immediately before packing or accepting release artifacts.
+ proof.prepackLatest=await checkOfficialCompatibility(['--latest']);
  const packageVersions={},archives=[];
  for(const name of ['dsh-delivery-receipts','dsh-evidence-ledger']){
   const pkg=JSON.parse(await readFile(join(workspace,'packages',name,'package.json')));packageVersions[pkg.name]=pkg.version;
@@ -67,16 +79,18 @@ try{
    assert.equal(rows.length,1);assert.equal(rows[0].name,pkg.name);assert.equal(rows[0].version,pkg.version);assert.equal(basename(rows[0].filename),rows[0].filename);archives.push(join(output,rows[0].filename));
   }
  }
- await command(process.execPath,['--import',guard,'scripts/check-release.mjs',...archives],workspace,'archive-check.log');
+ const audit=await runInSandbox(process.execPath,['--max-old-space-size=128','--import',guard,'scripts/check-release.mjs',...archives],{cwd:workspace,env:runtimeEnv,timeout:100000,maxBuffer:1024*1024});await writeFile(join(output,'archive-check.log'),audit.stdout+audit.stderr);
  proof.packages=await Promise.all(archives.map(async path=>({path,sha256:await hash(path)})));proof.sameRunReleaseArtifacts=Boolean(options['--artifacts-dir']);
- if(plan.officialHost){
+ if(doHost){
   const cli=join(runtime,'@deepseek-ai/dsh/lib/bin.js');
   const hostEnv={...env,PATH:join(bootstrap,'node_modules/.bin')+delimiter+env.PATH};
   assert.equal(JSON.parse(await readFile(join(bootstrap,'node_modules/pnpm/package.json'))).version,'11.28.5');proof.pnpmVersion='11.28.5';
   for(let i=0;i<archives.length;i++)await command(process.execPath,[cli,'plugin','--profile','web','add','--ignore-scripts',archives[i]],workspace,'host-install-'+i+'.log',90000,hostEnv);
   const project=join(root,'synthetic-project');await mkdir(project);await writeFile(join(project,'synthetic-artifact.md'),'Synthetic exact bytes\n合成测试\n');
   const patch=join(root,'proof.patch.yml');await writeFile(patch,JSON.stringify([{insert:[{id:'workproof-ci-proof',name:pathToFileURL(join(workspace,'scripts/ci/host-observer.mjs')).href,config:{version:plan.sdkVersion,workspace:project,packageVersions}}]}]));
-  const child=spawn(process.execPath,['--import',guard,cli,'--profile','web','--patch',patch,'--host','127.0.0.1','--port','0','--no-open'],{cwd:project,env:hostEnv,stdio:['ignore','pipe','pipe','ipc']});
+  proof.officialHostHeapPolicy='original-node-default';
+  const wrapped=await sandboxCommand(process.execPath,[cli,'--profile','web','--patch',patch,'--host','127.0.0.1','--port','0','--no-open'],{...hostEnv,NODE_OPTIONS:'--import='+guard});
+  const child=spawn(wrapped.command,wrapped.args,{cwd:project,env:wrapped.env,stdio:['ignore','pipe','pipe','ipc']});
   let stdout='',stderr='',sent=false;
   try{proof.officialHost=await new Promise((resolve,reject)=>{
    const timer=setTimeout(()=>reject(Error('Own Host proof timed out: '+stderr.slice(-2000))),45000);const done=fn=>value=>{clearTimeout(timer);fn(value);};

@@ -62,6 +62,8 @@ jobs:
         run: |-
           npm run check --ignore-scripts
           node --test packages/*/test/*.test.js scripts/compatibility.test.mjs scripts/check-release.test.mjs
+      - name: Recheck current official latest immediately before packing
+        run: node scripts/ci/discover.mjs
       - name: Stage the public whitelist, pack and hash the exact archives
         id: pack
         run: |-

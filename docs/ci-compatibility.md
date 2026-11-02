@@ -20,12 +20,19 @@ package identity, rejects versions absent from `compatibility-manifest.json`,
 checks that package declarations match that list, and emits the exact version
 matrix. Missing registry access, malformed metadata and a new untested version
 fail the job. The matrix never automatically adds a version or weakens a range.
-The latest check runs again after every matrix job succeeds.
+The latest check runs again after every matrix job succeeds and immediately before
+packing or accepting release artifacts. A separate macOS Host matrix covers rc.4/rc.5. The full official Web Host keeps
+its original Node default memory envelope from the accepted publication runner;
+it is separate from the 128 MiB regression processes. A newly imposed 128 MiB
+full-Host attempt exhausted its heap, was retained as failed evidence, and was
+restored to the known uncapped Host baseline without removing assertions.
 
 Each matrix job uses Node 22.22.0 and npm 11.15.0. Exact official SDK services,
 their existing Cordis version, and product Zod 4.6.6 are installed without hooks
 into temporary directories. Every original source, release-audit and real
-Host-service suite runs against that SDK. Only the expected SDK/Cordis version
+Host-service suite runs against that SDK with a 128 MiB inherited Node heap cap
+and a 240-second runtime deadline. Nonempty TAP output must contain at least 82
+tests, equal pass/test totals, and zero failures, skips and cancellations. Only the expected SDK/Cordis version
 literals change in temporary copies of the two Host test files; none of the tool,
 command, authority, privacy or persistence assertions is removed. The four
 manifest versions remain 0.2.0-rc.2 and 0.2.1-rc.3/rc.4/rc.5.
@@ -38,16 +45,20 @@ pinned to public pnpm 11.28.5; Corepack does not select a moving version.
 All child processes receive an allowlisted environment with new HOME, DSH_HOME,
 agent storage, npm configuration and cache paths. Package download/installation
 happens before a Host runs and uses the public npm registry with install scripts
-disabled. Test and Host processes preload a guard for non-loopback fetch,
-HTTP/HTTPS, TLS, sockets and UDP. Host state and fixtures are synthetic, the Web
+disabled. Linux suites run in a private network namespace created by fixed system tools,
+then drop to the original UID/GID with no-new-privileges and restore an allowlisted
+environment. macOS suites and Host processes run under sandbox-exec. A kernel-level
+custom-lookup denial and a denied non-Node Python child must pass before runtime
+checks. The JavaScript preload remains an additional diagnostic guard. Host state and fixtures are synthetic, the Web
 Host binds to 127.0.0.1, and the runner stops its own process. No production
 profile, credential, model or messaging account is supplied. These checks do not
 renew Desktop UI, phone receipt or model-driven acceptance.
 
 ## Publication dependency and artifact binding
 
-The existing `npm-release.yml` keeps its Trusted Publisher identity and original
-validate/publish implementation. After validate uploads its immutable artifact,
+The existing `npm-release.yml` keeps its Trusted Publisher identity, original
+packing/artifact checks and original publish implementation. A fresh official
+latest check is inserted immediately before the validate job packs archives. After validate uploads its immutable artifact,
 it invokes the reusable compatibility workflow with that artifact ID and the
 validated run attempt. Each SDK job downloads the same immutable artifact and
 checks its name, version, canonical repository, source directory, commit, run ID,
@@ -78,9 +89,10 @@ fixtures can exercise that binding, but they do not constitute a GitHub Actions
 run.
 
 Local macOS validation passed the original 82 checks for every exact SDK and the
-rc.4/rc.5 archive Host checks with the portable pnpm executable. A completely cold
-rc.5 dependency download hit the existing 180-second bootstrap limit on this Mac;
-the failure was retained, and no cap was raised. The hosted Linux cold bootstrap
-and GitHub event/reusable-workflow wiring still require an actual run after the
+rc.4/rc.5 archive Host checks with the portable pnpm executable. A cold full-Host
+rc.5 SDK download hit the existing 180-second bootstrap limit on this Mac;
+the failure was retained, and no cap was raised. The fresh minimal service-SDK
+bootstrap subsequently passed locally. Hosted Linux namespace behavior, macOS
+full-SDK cold bootstrap, and GitHub event/reusable-workflow wiring still require an actual run after the
 workflow commit is reviewed and integrated. Local YAML parsing and dry execution
 do not mean scheduled or publication gates are already active on GitHub.
