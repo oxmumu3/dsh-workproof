@@ -127,9 +127,18 @@ jobs:
           retention-days: 7
           overwrite: false
           include-hidden-files: false
+  compatibility:
+    name: Gate exact SDK and official Host compatibility
+    needs: validate
+    permissions:
+      contents: read
+    uses: ./.github/workflows/sdk-compatibility.yml
+    with:
+      artifact-id: ${{ needs.validate.outputs.artifact_id }}
+      artifact-run-attempt: ${{ needs.validate.outputs.run_attempt }}
   publish:
     name: Publish validated npm artifact
-    needs: validate
+    needs: [validate, compatibility]
     if: ${{ github.event_name == 'workflow_dispatch' && github.repository == 'oxmumu3/dsh-workproof' && github.ref == 'refs/heads/main' && inputs.publish == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 10

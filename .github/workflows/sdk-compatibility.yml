@@ -1,0 +1,116 @@
+name: Exact official SDK compatibility
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3,15 * * *'
+  workflow_call:
+    inputs:
+      artifact-id:
+        description: Immutable npm-release artifact ID from the calling run.
+        type: string
+        required: false
+        default: ''
+      artifact-run-attempt:
+        description: Validation attempt bound into that release artifact.
+        type: string
+        required: false
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: sdk-compatibility-${{ github.workflow }}-${{ github.run_id }}-${{ github.run_attempt }}
+  cancel-in-progress: false
+jobs:
+  discover:
+    if: ${{ github.repository == 'oxmumu3/dsh-workproof' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      sdk_versions: ${{ steps.matrix.outputs.sdk_versions }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22.22.0
+          package-manager-cache: false
+      - name: Check CI contracts without package installation or secrets
+        run: node --test scripts/ci/contracts.test.mjs
+      - name: Fail closed on unknown official latest and derive exact matrix
+        id: matrix
+        run: node scripts/ci/discover.mjs
+  sdk:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJSON(needs.discover.outputs.sdk_versions) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22.22.0
+          package-manager-cache: false
+      - name: Use npm 11.15.0 without user credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/npm-bootstrap-home"
+          printf 'registry=https://registry.npmjs.org/\nignore-scripts=true\n' > "$RUNNER_TEMP/npm-bootstrap.npmrc"
+          cp "$RUNNER_TEMP/npm-bootstrap.npmrc" "$RUNNER_TEMP/npm-bootstrap-global.npmrc"
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/npm-bootstrap-home" NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-bootstrap.npmrc" NPM_CONFIG_GLOBALCONFIG="$RUNNER_TEMP/npm-bootstrap-global.npmrc" npm install --global npm@11.15.0 --ignore-scripts --no-audit --no-fund
+      - name: Download this run's exact validated release artifacts
+        if: ${{ inputs.artifact-id != '' }}
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          artifact-ids: ${{ inputs.artifact-id }}
+          path: ${{ runner.temp }}/workproof-release-artifact/
+          merge-multiple: true
+          digest-mismatch: error
+      - name: Run original suites with exact SDK and isolated official Host
+        shell: bash
+        env:
+          SDK_VERSION: ${{ matrix.version }}
+          ARTIFACT_ID: ${{ inputs.artifact-id }}
+          ARTIFACT_RUN_ATTEMPT: ${{ inputs.artifact-run-attempt }}
+        run: |
+          set -euo pipefail
+          args=(--version "$SDK_VERSION" --output "$RUNNER_TEMP/workproof-ci-results")
+          if [[ -n "$ARTIFACT_ID" ]]; then
+            args+=(--artifacts-dir "$RUNNER_TEMP/workproof-release-artifact" --artifact-run-attempt "$ARTIFACT_RUN_ATTEMPT")
+          fi
+          node scripts/ci/run-sdk.mjs "${args[@]}"
+      - name: Keep bounded compatibility evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: compatibility-${{ matrix.version }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/workproof-ci-results/
+          if-no-files-found: warn
+          retention-days: 7
+          overwrite: false
+          include-hidden-files: false
+  gate:
+    needs: [discover, sdk]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22.22.0
+          package-manager-cache: false
+      - name: Recheck official latest after every exact SDK job passed
+        run: node scripts/ci/discover.mjs
