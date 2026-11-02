@@ -57,7 +57,7 @@ try{
  }
  const guard=pathToFileURL(join(workspace,'scripts/ci/network-guard.mjs')).href;
  const tests=[];for(const name of ['dsh-delivery-receipts','dsh-evidence-ledger'])for(const file of await readdir(join(workspace,'packages',name,'test')))if(file.endsWith('.test.js'))tests.push('packages/'+name+'/test/'+file);
- tests.push('scripts/compatibility.test.mjs','scripts/check-release.test.mjs','scripts/host-smoke.mjs','scripts/ledger-host-smoke.mjs');
+ tests.push('scripts/ci/os-sandbox.test.mjs','scripts/compatibility.test.mjs','scripts/check-release.test.mjs','scripts/host-smoke.mjs','scripts/ledger-host-smoke.mjs');
  const runtimeEnv={...env,NODE_OPTIONS:'--max-old-space-size=128'};proof.serviceHeapLimitMiB=128;proof.sandboxProbeHeapLimitMiB=128;
  proof.osNetwork=await verifySandbox({cwd:workspace,env:runtimeEnv});await writeFile(join(output,'os-network-proof.json'),JSON.stringify(proof.osNetwork,null,2)+'\n');
  if(doServices){

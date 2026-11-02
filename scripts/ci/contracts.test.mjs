@@ -33,6 +33,6 @@ test('runtime guard rejects every instrumented non-loopback transport before I/O
 });
 test('TAP accounting rejects empty, incomplete, skipped or cancelled suites',async()=>{
  const {validateTap}=await load();assert.equal(typeof validateTap,'function');
- const complete='# tests 82\n# pass 82\n# fail 0\n# skipped 0\n# cancelled 0\n';assert.equal(validateTap(complete).tests,82);
- for(const text of ['',complete.replace('tests 82','tests 0'),complete.replace('pass 82','pass 81'),complete.replace('skipped 0','skipped 1'),complete.replace('cancelled 0','cancelled 1')])assert.throws(()=>validateTap(text),/TAP/);
+ const complete='# tests 86\n# pass 86\n# fail 0\n# skipped 0\n# cancelled 0\n';assert.equal(validateTap(complete).tests,86);
+ for(const text of ['',complete.replace('tests 86','tests 0'),complete.replace('pass 86','pass 85'),complete.replace('skipped 0','skipped 1'),complete.replace('cancelled 0','cancelled 1')])assert.throws(()=>validateTap(text),/TAP/);
 });

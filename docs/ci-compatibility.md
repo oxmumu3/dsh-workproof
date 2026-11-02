@@ -31,8 +31,8 @@ Each matrix job uses Node 22.22.0 and npm 11.15.0. Exact official SDK services,
 their existing Cordis version, and product Zod 4.6.6 are installed without hooks
 into temporary directories. Every original source, release-audit and real
 Host-service suite runs against that SDK with a 128 MiB inherited Node heap cap
-and a 240-second runtime deadline. Nonempty TAP output must contain at least 82
-tests, equal pass/test totals, and zero failures, skips and cancellations. Only the expected SDK/Cordis version
+and a 240-second runtime deadline. Nonempty TAP output must contain at least 86
+tests (including four process-controller regressions), equal pass/test totals, and zero failures, skips and cancellations. Only the expected SDK/Cordis version
 literals change in temporary copies of the two Host test files; none of the tool,
 command, authority, privacy or persistence assertions is removed. The four
 manifest versions remain 0.2.0-rc.2 and 0.2.1-rc.3/rc.4/rc.5.
