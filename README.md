@@ -1,5 +1,7 @@
 # DSH Workproof
 
+📖 设计思考与生态复盘：[《DeepSeek Harness 要走向极客玩具还是大众普惠？》](https://mp.weixin.qq.com/s/RIAYNqo8OsUVx2JpR8MPyA)
+
 **让 Agent 的“我做完了”，变成你能检查、能追溯的交付。**
 
 作者：**牛村木木山**。两个可独立安装的 DeepSeek Harness 社区插件，不是官方产品。
