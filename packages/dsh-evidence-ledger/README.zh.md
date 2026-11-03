@@ -1,5 +1,7 @@
 # DeepSeek Harness 研究证据账本
 
+📖 设计思考与生态复盘：[《DeepSeek Harness 要走向极客玩具还是大众普惠？》](https://mp.weixin.qq.com/s/RIAYNqo8OsUVx2JpR8MPyA)
+
 [English](README.md)
 
 找到判断的依据，不把“有引用”当成“已核验”。
