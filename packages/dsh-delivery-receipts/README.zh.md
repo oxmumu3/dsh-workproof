@@ -1,5 +1,7 @@
 # DeepSeek Harness 交付回执
 
+📖 设计思考与生态复盘：[《DeepSeek Harness 要走向极客玩具还是大众普惠？》](https://mp.weixin.qq.com/s/RIAYNqo8OsUVx2JpR8MPyA)
+
 [English](README.md)
 
 把文件证据、Agent 声明和你的验收意见放进同一条会话回执，知道当前该看哪个成果、旧的接受意见是否仍适用。
