@@ -8,9 +8,9 @@ Author: **牛村木木山**. A community project, not an official DeepSeek produ
 
 ## Release status and compatibility
 
-**Compatibility preview 0.1.3-preview.2.** See [Releases](https://github.com/oxmumu3/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. Runtime code is byte-identical to public npm 0.1.3-preview.1. The rc.4/rc.5 checks use synthetic local data, real official tools/commands/storage and isolated CLI Hosts; they do not renew UI or model acceptance. A package version is not a promise of compatibility with untested hosts.
+**Compatibility preview 0.1.3-preview.3 candidate.** Product runtime code remains byte-identical to 0.1.3-preview.2. Exact rc1 validation uses official SDK 0.2.2-rc.1, Cordis 4.1.0 and Node 24.22.1, with synthetic data and an isolated official CLI Host. The SDK test adapter selects the official native batch executor introduced in rc1. UI, model-driven use and production-profile acceptance are separate. Publication and downloadable assets must be checked in [Releases](https://github.com/oxmumu3/dsh-workproof/releases).
 
-Tested Host versions are **DeepSeek Harness `0.2.0-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.4` and `0.2.1-rc.5`**. The tools, storage-domain and commands peers declare only the explicit union of these versions. Node.js **22+** is required. The first acceptance target is a **local macOS workspace**; other operating systems, remote workspaces and Harness versions are unverified.
+Tested Host versions are **DeepSeek Harness `0.2.0-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.4`, `0.2.1-rc.5` and `0.2.2-rc.1`**. The tools, storage-domain and commands peers declare only the explicit union of these versions. Node.js **22+** is required by this plugin; official rc1 requires **24.9+** and was checked with **24.22.1**. The first acceptance target is a **local macOS workspace**; other operating systems, remote workspaces and Harness versions are unverified.
 
 ## What it does
 
@@ -32,7 +32,7 @@ The distribution uses a prebuilt `.tgz`, with **no install-time scripts** and no
 Install this exact npm version into your intended profile:
 
 ```sh
-dsh plugin --profile web add @oxmumu3/dsh-evidence-ledger@0.1.3-preview.2
+dsh plugin --profile web add @oxmumu3/dsh-evidence-ledger@0.1.3-preview.3
 ```
 
 `web` is an example profile, not a universal Desktop profile name. Use the profile selected by your actual app and follow the Harness version's normal reload/restart behavior. Source and release status: [oxmumu3/dsh-workproof](https://github.com/oxmumu3/dsh-workproof).

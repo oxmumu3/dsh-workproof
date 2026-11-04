@@ -34,7 +34,7 @@
 
 [下载 Release](https://github.com/oxmumu3/dsh-workproof/releases) · [验证记录](docs/verification.md) · [反馈问题](https://github.com/oxmumu3/dsh-workproof/issues)
 
-当前兼容性预览 `0.1.3-preview.2` 已验证 **Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`、Node.js 22+、macOS 本地工作区**。运行时代码与公开 npm `0.1.3-preview.1` 一致；rc.4/rc.5 新增隔离 CLI Host 和工具/命令/存储验证，不代表新的 UI 或模型验收。其他宿主版本、系统和远程工作区不作未经验证的兼容承诺。源代码测试、安装包测试和社区收录是不同状态，见验证记录。
+兼容性候选 `0.1.3-preview.3` 在既有四个准确 SDK 版本上增加官方 `0.2.2-rc.1`；rc1 使用 Cordis 4.1.0 与 Node 24.22.1。产品运行时代码保持不变，验证使用合成本地数据、官方服务和隔离 CLI Host；不代表新的 UI 或模型验收。候选包、公开发布、社区分发和读者实际安装是不同状态。
 
 Release 使用 `.tgz` 预构建包及 `SHA256SUMS`，不需要 npm 账号，两个插件包自身不含安装时脚本。对照校验和后，按各插件文档安装到你应用实际使用的 profile；文档中的 `web` 只是示例，不能拿来覆盖桌面 profile。
 

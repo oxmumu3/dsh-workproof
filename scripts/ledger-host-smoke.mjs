@@ -16,7 +16,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Context } from '@deepseek-ai/cordis';
 import SystemPrompt from '@deepseek-ai/dsh-system-prompt';
-import ToolRuntime from '@deepseek-ai/dsh-tools';
+import {mountToolRuntime,executeTool} from './exact-tool-runtime.mjs';
 import CommandRuntime from '@deepseek-ai/dsh-commands';
 import Storage from '@deepseek-ai/dsh-storage';
 import * as JsonStorage from '@deepseek-ai/dsh-storage-json';
@@ -42,7 +42,7 @@ async function openHost(storageRoot, workspace, plugin) {
   const sessionEvents = [];
   try {
     await ctx.plugin(SystemPrompt, {});
-    await ctx.plugin(ToolRuntime, { mode: 'native' });
+    await mountToolRuntime(ctx);
     await ctx.plugin(CommandRuntime);
     await ctx.plugin(Storage);
     await ctx.plugin(JsonStorage, { root: storageRoot });
@@ -67,7 +67,7 @@ async function openHost(storageRoot, workspace, plugin) {
 
     async function invokeTool(args, agent = owner) {
       const callId = `ledger-smoke-${++callNumber}`;
-      const outcome = await ctx.tools.execute({
+      const outcome = await executeTool(ctx, {
         callId, name: 'evidence_ledger', arguments: args, agent, signal: signal(),
       });
       const observed = toolResults.find(item => item.callId === callId);

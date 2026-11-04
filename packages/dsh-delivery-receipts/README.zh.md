@@ -10,9 +10,9 @@
 
 ## 发布状态
 
-**兼容性预览 0.1.3-preview.2。** 下载资产见 [Releases](https://github.com/oxmumu3/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md)。运行时代码与公开 npm 0.1.3-preview.1 逐字节一致。rc.4/rc.5 检查使用合成本地数据、官方工具/命令/存储服务和隔离 CLI Host，不代表新的 UI 或模型验收。包版本不等于对未测试宿主的兼容承诺。
+**兼容性预览 0.1.3-preview.3 候选版。** 产品运行时代码与 0.1.3-preview.2 逐字节一致。rc1 验证使用官方 SDK 0.2.2-rc.1、Cordis 4.1.0 与 Node 24.22.1，数据与 CLI Host 均隔离。测试适配层使用 rc1 官方新增的 native batch executor。UI、模型使用与日常 profile 验收另计；公开发布与下载资产须以 [Releases](https://github.com/oxmumu3/dsh-workproof/releases) 为准。
 
-已验证 **DeepSeek Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`**，三个 peer dependency 仅声明这些已验证版本：
+已验证 **DeepSeek Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`、`0.2.2-rc.1`**，三个 peer dependency 仅声明这些已验证版本：
 
 - `@deepseek-ai/dsh-tools`
 - `@deepseek-ai/dsh-storage-domain`
@@ -37,7 +37,7 @@
 将这个确切的 npm 版本安装到目标 profile：
 
 ```sh
-dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.2
+dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.3
 ```
 
 命令中的 `web` 是示例 profile 名，不是所有桌面应用通用的配置名；请使用实际应用选中的 profile。插件加载和重启遵循该版本 Harness 的正常机制，不要为寻找标签页修改其他 profile。
@@ -148,3 +148,5 @@ dsh plugin --profile web remove dsh-delivery-receipts
 ## 许可
 
 [MIT](LICENSE)，Copyright 2026 牛村木木山。
+
+官方 rc1 需要 Node.js 24.9+，本次准确验证使用 Node 24.22.1。

@@ -8,13 +8,13 @@ Author: **牛村木木山**. This is a community project, not an official DeepSe
 
 ## Release status
 
-**Compatibility preview 0.1.3-preview.2.** See [Releases](https://github.com/oxmumu3/dsh-workproof/releases) for downloadable assets and [the verification record](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md) for completed checks and remaining boundaries. Runtime code is byte-identical to public npm 0.1.3-preview.1. The rc.4/rc.5 checks use synthetic local data, real official tools/commands/storage and isolated CLI Hosts; they do not renew UI or model acceptance. A package version is not a promise of compatibility with untested hosts.
+**Compatibility preview 0.1.3-preview.3 candidate.** Product runtime code remains byte-identical to 0.1.3-preview.2. Exact rc1 validation uses official SDK 0.2.2-rc.1, Cordis 4.1.0 and Node 24.22.1, with synthetic data and an isolated official CLI Host. The SDK test adapter selects the official native batch executor introduced in rc1. UI, model-driven use and production-profile acceptance are separate. Publication and downloadable assets must be checked in [Releases](https://github.com/oxmumu3/dsh-workproof/releases).
 
-Tested Host versions are **DeepSeek Harness `0.2.0-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.4` and `0.2.1-rc.5`**. Each peer uses the explicit union of these versions:
+Tested Host versions are **DeepSeek Harness `0.2.0-rc.2`, `0.2.1-rc.3`, `0.2.1-rc.4`, `0.2.1-rc.5` and `0.2.2-rc.1`**. Each peer uses the explicit union of these versions:
 
-- `@deepseek-ai/dsh-tools@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
-- `@deepseek-ai/dsh-storage-domain@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
-- `@deepseek-ai/dsh-commands@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5)`
+- `@deepseek-ai/dsh-tools@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1)`
+- `@deepseek-ai/dsh-storage-domain@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1)`
+- `@deepseek-ai/dsh-commands@(0.2.0-rc.2 || 0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1)`
 
 Node.js 22 or newer is required. Initial end-to-end acceptance is scoped to **local files on macOS**. Windows, Linux, remote workspaces and other Harness versions are not yet verified.
 
@@ -35,7 +35,7 @@ The distribution uses a **prebuilt `.tgz`**, without `install`, `postinstall` or
 Install this exact npm version into your intended profile:
 
 ```sh
-dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.2
+dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts@0.1.3-preview.3
 ```
 
 `web` is the profile name in this example, not a universal Desktop profile name. Use the profile selected by your actual app. Follow the Harness version's normal plugin reload/restart behavior; do not edit another profile merely to make the tab appear.
@@ -146,3 +146,5 @@ Report reproducible issues at [GitHub Issues](https://github.com/oxmumu3/dsh-wor
 ## License
 
 [MIT](LICENSE), copyright 2026 牛村木木山.
+
+Official rc1 requires Node.js 24.9+; exact validation uses Node 24.22.1.

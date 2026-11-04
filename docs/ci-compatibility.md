@@ -1,6 +1,6 @@
 # Official SDK compatibility gates
 
-The CI change does not change either package version or any file under `packages/`.
+The rc1 compatibility candidate is 0.1.3-preview.3. Product index/client/service files remain unchanged; package metadata and documentation add only the verified exact rc1 target.
 The last published packages remain `@oxmumu3/dsh-delivery-receipts@0.1.3-preview.2`
 and `@oxmumu3/dsh-evidence-ledger@0.1.3-preview.2`, published from `c98fe19` by
 Trusted Publisher run `41349598621`. Those npm versions are immutable. Their final
@@ -15,31 +15,30 @@ SHA-256 values are respectively:
 
 `.github/workflows/sdk-compatibility.yml` runs on pushes, pull requests, manual
 requests, and twice daily at 03:17/15:17 UTC. It is also a reusable workflow.
-`discover.mjs` reads the official npm latest metadata with a timeout, validates the
+`discover.mjs` independently reads official npm latest/next and the mac-arm64 Desktop feed with timeouts. Desktop must match a reviewed exact SDK latest or next; alpha is never auto-admitted. It validates the
 package identity, rejects versions absent from `compatibility-manifest.json`,
 checks that package declarations match that list, and emits the exact version
 matrix. Missing registry access, malformed metadata and a new untested version
 fail the job. The matrix never automatically adds a version or weakens a range.
 The latest check runs again after every matrix job succeeds and immediately before
-packing or accepting release artifacts. A separate macOS Host matrix covers rc.4/rc.5. The full official Web Host keeps
+packing or accepting release artifacts. A separate macOS Host matrix covers rc.4/rc.5 and rc1. The full official Web Host keeps
 its original Node default memory envelope from the accepted publication runner;
 it is separate from the 128 MiB regression processes. A newly imposed 128 MiB
 full-Host attempt exhausted its heap, was retained as failed evidence, and was
 restored to the known uncapped Host baseline without removing assertions.
 
-Each matrix job uses Node 22.22.0 and npm 11.15.0. Exact official SDK services,
+Existing SDK jobs use Node 22.22.0; exact rc1 jobs use Node 24.22.1 and Cordis 4.1.0. All jobs retain npm 11.15.0. Exact official SDK services,
 their existing Cordis version, and product Zod 4.6.6 are installed without hooks
 into temporary directories. Every original source, release-audit and real
 Host-service suite runs against that SDK with a 128 MiB inherited Node heap cap
 and a 240-second runtime deadline. Nonempty TAP output must contain at least 86
 tests (including four process-controller regressions), equal pass/test totals, and zero failures, skips and cancellations. Only the expected SDK/Cordis version
-literals change in temporary copies of the two Host test files; none of the tool,
-command, authority, privacy or persistence assertions is removed. The four
-manifest versions remain 0.2.0-rc.2 and 0.2.1-rc.3/rc.4/rc.5.
+literals change in temporary copies of the two Host test files. The shared adapter selects the exact official legacy or rc1 batch executor API; none of the tool,
+command, authority, privacy or persistence assertions is removed. The manifest retains 0.2.0-rc.2 and 0.2.1-rc.3/rc.4/rc.5 and adds 0.2.2-rc.1.
 
-For rc.4 and rc.5, the same job also installs exact package archives through the
+For rc.4, rc.5 and rc1, the same job also installs exact package archives through the
 official CLI, checks both enabled/active bundles, and exercises actual receipt and
-ledger tools and user commands. The package-manager executable is explicitly
+ledger tools and user commands. The lifecycle proof then disables, restarts disabled, re-enables, restarts enabled, removes both packages and restarts with no remaining tool/command registrations. Actual CLI install/removal runs offline under the OS sandbox after an owned store is warmed before Host startup. The package-manager executable is explicitly
 pinned to public pnpm 11.28.5; Corepack does not select a moving version.
 
 All child processes receive an allowlisted environment with new HOME, DSH_HOME,

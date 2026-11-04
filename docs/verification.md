@@ -2,6 +2,10 @@
 
 This file separates source-level checks, real runtime checks, packaged UI checks and public-release verification. A completed earlier layer does not imply later layers passed. All examples are synthetic; no business files, model credentials or existing conversations are used.
 
+## Exact rc1 compatibility candidate — 2026-11-04
+
+See [the rc1 record](releases/v0.1.3-preview.3.md). The published preview.2 evidence below remains historical; new candidate evidence does not renew UI or model acceptance.
+
 ## Compatibility preview 0.1.3-preview.2 — 2026-11-01
 
 Both scoped packages retain the exact runtime bytes of public npm

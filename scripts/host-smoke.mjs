@@ -15,7 +15,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Context } from '@deepseek-ai/cordis';
 import SystemPrompt from '@deepseek-ai/dsh-system-prompt';
-import ToolRuntime from '@deepseek-ai/dsh-tools';
+import {mountToolRuntime,executeTool} from './exact-tool-runtime.mjs';
 import CommandRuntime from '@deepseek-ai/dsh-commands';
 import Storage from '@deepseek-ai/dsh-storage';
 import * as JsonStorage from '@deepseek-ai/dsh-storage-json';
@@ -41,7 +41,7 @@ async function openHost(storageRoot, workspace, receiptPlugin) {
   const sessionEvents = [];
   try {
     await ctx.plugin(SystemPrompt, {});
-    await ctx.plugin(ToolRuntime, { mode: 'native' });
+    await mountToolRuntime(ctx);
     await ctx.plugin(CommandRuntime);
     await ctx.plugin(Storage);
     await ctx.plugin(JsonStorage, { root: storageRoot });
@@ -68,7 +68,7 @@ async function openHost(storageRoot, workspace, receiptPlugin) {
 
     async function invokeTool(agent, args) {
       const callId = `workproof-smoke-${++callNumber}`;
-      const result = await ctx.tools.execute({
+      const result = await executeTool(ctx, {
         callId, name: 'delivery_receipt', arguments: args, agent, signal: signal(),
       });
       const observed = toolResults.find((entry) => entry.callId === callId);

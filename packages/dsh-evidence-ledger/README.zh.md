@@ -10,9 +10,9 @@
 
 ## 发布状态与兼容范围
 
-**兼容性预览 0.1.3-preview.2。** 下载资产见 [Releases](https://github.com/oxmumu3/dsh-workproof/releases)，实际完成的检查与验证边界见[验证记录](https://github.com/oxmumu3/dsh-workproof/blob/main/docs/verification.md)。运行时代码与公开 npm 0.1.3-preview.1 逐字节一致。rc.4/rc.5 检查使用合成本地数据、官方工具/命令/存储服务和隔离 CLI Host，不代表新的 UI 或模型验收。包版本不等于对未测试宿主的兼容承诺。
+**兼容性预览 0.1.3-preview.3 候选版。** 产品运行时代码与 0.1.3-preview.2 逐字节一致。rc1 验证使用官方 SDK 0.2.2-rc.1、Cordis 4.1.0 与 Node 24.22.1，数据与 CLI Host 均隔离。测试适配层使用 rc1 官方新增的 native batch executor。UI、模型使用与日常 profile 验收另计；公开发布与下载资产须以 [Releases](https://github.com/oxmumu3/dsh-workproof/releases) 为准。
 
-已验证 **DeepSeek Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`**，tools、storage-domain、commands 三个 peer dependency 使用这些版本的显式并集。需要 **Node.js 22+**。首次验收范围为 **macOS 本地工作区**；其他系统、远程工作区与 Harness 版本尚未验证。
+已验证 **DeepSeek Harness `0.2.0-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.4`、`0.2.1-rc.5`、`0.2.2-rc.1`**，tools、storage-domain、commands 三个 peer dependency 使用这些版本的显式并集。插件需要 **Node.js 22+**；官方 rc1 需要 **24.9+**，本次准确验证为 **24.22.1**。首次验收范围为 **macOS 本地工作区**；其他系统、远程工作区与 Harness 版本尚未验证。
 
 ## 它做什么
 
@@ -34,7 +34,7 @@
 将这个确切的 npm 版本安装到目标 profile：
 
 ```sh
-dsh plugin --profile web add @oxmumu3/dsh-evidence-ledger@0.1.3-preview.2
+dsh plugin --profile web add @oxmumu3/dsh-evidence-ledger@0.1.3-preview.3
 ```
 
 `web` 是示例 profile 名，不是所有桌面应用通用的配置名。请使用实际应用选中的 profile，加载和重启遵循该版本 Harness 的正常机制。源码与发布状态：[oxmumu3/dsh-workproof](https://github.com/oxmumu3/dsh-workproof)。

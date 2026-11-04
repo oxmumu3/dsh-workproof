@@ -11,7 +11,7 @@ test('official discovery refuses a new version and a wrong package identity',asy
 });
 test('SDK install plans contain only exact public versions from the tested manifest',async()=>{
  const {sdkInstallPlan}=await load();
- for(const version of manifest.testedHostVersions){const p=sdkInstallPlan(manifest,version);assert.equal(p.sdkVersion,version);assert.equal(p.dependencies['@deepseek-ai/dsh-tools'],version);assert.equal(p.dependencies.zod,'4.6.6');assert.equal(p.officialHost,['0.2.1-rc.4','0.2.1-rc.5'].includes(version));}
+ for(const version of manifest.testedHostVersions){const p=sdkInstallPlan(manifest,version);assert.equal(p.sdkVersion,version);assert.equal(p.dependencies['@deepseek-ai/dsh-tools'],version);assert.equal(p.dependencies.zod,'4.6.6');assert.equal(p.officialHost,['0.2.1-rc.4','0.2.1-rc.5','0.2.2-rc.1'].includes(version));}
  assert.throws(()=>sdkInstallPlan(manifest,'0.2.1-rc.6'),/untested/i);
  assert.throws(()=>sdkInstallPlan(manifest,'latest'),/invalid/i);
 });

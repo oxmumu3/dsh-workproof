@@ -6,13 +6,15 @@
     "0.2.0-rc.2",
     "0.2.1-rc.3",
     "0.2.1-rc.4",
-    "0.2.1-rc.5"
+    "0.2.1-rc.5",
+    "0.2.2-rc.1"
   ],
   "packages": [
     "@oxmumu3/dsh-delivery-receipts",
     "@oxmumu3/dsh-evidence-ledger"
   ],
   "runtimeBaseline": "0.1.3-preview.1",
-  "evidence": "docs/releases/v0.1.3-preview.2.md",
-  "bounds": "Synthetic local macOS fixtures, exact official SDK services and isolated official CLI Host. No model, production profile, private workspace, messaging account or new UI acceptance."
+  "evidence": "docs/releases/v0.1.3-preview.3.md",
+  "bounds": "Synthetic local macOS fixtures, exact official SDK services and isolated official CLI Host. No model, production profile, private workspace, messaging account or new UI acceptance.",
+  "officialDesktopFeed": "https://download.deepseek.com/dsh-desk/feeds/mac-arm64/nightly-mac.yml"
 }
