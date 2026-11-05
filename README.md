@@ -50,6 +50,10 @@ dsh plugin --profile web add @oxmumu3/dsh-delivery-receipts
 dsh plugin --profile web add @oxmumu3/dsh-evidence-ledger
 ```
 
+## 现成的验收清单
+
+不想从零想检查项时，直接抄[三份清单](docs/templates/acceptance-checklists.md)（文章 / 代码 / 研究）：每一条都要求「声明」和「证据」分开，没有证据的条目写“未验证”，不许用推断补。
+
 ## 它不会替你做的事
 
 - **哈希不是质量证明。** 只说明文件没变，不说明写得好、跑得通、测过。
